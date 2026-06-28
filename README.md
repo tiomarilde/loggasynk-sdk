@@ -185,6 +185,28 @@ docker compose exec app composer api:smoke
 
 O smoke test nao cria instancia, nao envia mensagem e nao altera configuracao.
 
+## Exemplos Executaveis
+
+Todos os exemplos usam as variaveis do `.env` quando executados via Docker Compose.
+
+```bash
+docker compose exec app composer auth:test
+docker compose exec app composer api:smoke
+docker compose exec app composer example:instance
+docker compose exec app composer example:create-instance
+docker compose exec app composer example:profile
+docker compose exec app composer example:webhook
+docker compose exec app composer example:messages
+```
+
+Observacoes:
+
+- `example:instance` apenas consulta `status`, `data`, `billing` e `qr-code`.
+- `example:create-instance` cria uma instancia e pode gerar fluxo de billing/PIX.
+- `example:profile` altera perfil, bloqueio de ligacoes e nome da instancia.
+- `example:webhook` consulta e atualiza a URL do webhook, alem de validar assinatura localmente.
+- `example:messages` envia mensagens reais para `LOGGASYNK_MESSAGE_PHONE`.
+
 ## Design
 
 - `Domain`: `ClientCredentials`, `AccessToken`, `ApiConfig` e verificacao de webhook.

@@ -26,6 +26,11 @@
     "test": "phpunit",
     "auth:test": "php examples/authenticate.php",
     "api:smoke": "php examples/smoke.php",
+    "example:instance": "php examples/instance-read.php",
+    "example:create-instance": "php examples/create-instance.php",
+    "example:profile": "php examples/profile-settings.php",
+    "example:webhook": "php examples/webhook.php",
+    "example:messages": "php examples/send-messages.php",
     "lint": "find src tests examples -name '*.php' -print0 | xargs -0 -n1 php -l",
     "check": [
       "@lint",
