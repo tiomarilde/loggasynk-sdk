@@ -13,7 +13,7 @@ final readonly class UpdateWebhookRequest implements RequestPayload
 
     public static function create(string $webhookUrl): self
     {
-        return new self($webhookUrl);
+        return new self(PayloadValidator::url($webhookUrl, 'webhookUrl', httpsOnly: true));
     }
 
     public function toArray(): array

@@ -25,7 +25,11 @@
   "scripts": {
     "test": "phpunit",
     "auth:test": "php examples/authenticate.php",
-    "analyse": "php -l src/LoggaSynkClient.php"
+    "lint": "find src tests examples -name '*.php' -print0 | xargs -0 -n1 php -l",
+    "check": [
+      "@lint",
+      "@test"
+    ]
   },
   "config": {
     "sort-packages": true

@@ -14,7 +14,10 @@ final readonly class SendTextMessageRequest implements RequestPayload
 
     public static function create(string $phone, string $message): self
     {
-        return new self($phone, $message);
+        return new self(
+            PayloadValidator::phone($phone),
+            PayloadValidator::requiredString($message, 'message', 4096),
+        );
     }
 
     public function toArray(): array

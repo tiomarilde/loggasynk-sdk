@@ -6,6 +6,7 @@ namespace LoggaSynk\ConnectApi\Resource;
 
 use LoggaSynk\ConnectApi\Domain\AccessToken;
 use LoggaSynk\ConnectApi\Domain\ApiConfig;
+use LoggaSynk\ConnectApi\Domain\InstanceId;
 use LoggaSynk\ConnectApi\DTO\RequestPayload;
 use LoggaSynk\ConnectApi\Exception\ApiHttpException;
 use LoggaSynk\ConnectApi\Exception\AuthenticationException;
@@ -26,9 +27,9 @@ final readonly class WhatsAppResource
     /**
      * @return array<string, mixed>|null
      */
-    public function instances(AccessToken $token): ?array
+    public function instances(array|RequestPayload $payload, AccessToken $token): ?array
     {
-        return $this->createInstance([], $token);
+        return $this->createInstance($payload, $token);
     }
 
     /**
@@ -80,7 +81,7 @@ final readonly class WhatsAppResource
      */
     public function webhook(string $instanceId, AccessToken $token): ?array
     {
-        return $this->execute(HttpRequest::get($this->config->url("/{$instanceId}/webhook")), $token);
+        return $this->execute(HttpRequest::get($this->instanceWebhookUrl($instanceId)), $token);
     }
 
     /**
@@ -114,7 +115,7 @@ final readonly class WhatsAppResource
     public function updateWebhook(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
     {
         return $this->execute(
-            HttpRequest::post($this->config->url("/{$instanceId}/webhook"), $this->payload($payload)),
+            HttpRequest::post($this->instanceWebhookUrl($instanceId), $this->payload($payload)),
             $token,
         );
     }
@@ -169,7 +170,17 @@ final readonly class WhatsAppResource
 
     private function whatsappUrl(string $instanceId, string $path): string
     {
-        return $this->config->url("/whatsapp/{$instanceId}/{$path}");
+        return $this->config->url('/whatsapp/' . $this->instanceId($instanceId)->pathSegment() . "/{$path}");
+    }
+
+    private function instanceWebhookUrl(string $instanceId): string
+    {
+        return $this->config->url('/' . $this->instanceId($instanceId)->pathSegment() . '/webhook');
+    }
+
+    private function instanceId(string $instanceId): InstanceId
+    {
+        return InstanceId::fromString($instanceId);
     }
 
     /**

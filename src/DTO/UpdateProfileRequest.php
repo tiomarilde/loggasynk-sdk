@@ -18,7 +18,11 @@ final readonly class UpdateProfileRequest implements RequestPayload
         ?string $name = null,
         ?string $description = null,
     ): self {
-        return new self($photoUrl, $name, $description);
+        return new self(
+            $photoUrl === null ? null : PayloadValidator::url($photoUrl, 'photoUrl'),
+            PayloadValidator::optionalString($name, 'name', 120),
+            PayloadValidator::optionalString($description, 'description', 512),
+        );
     }
 
     public function toArray(): array

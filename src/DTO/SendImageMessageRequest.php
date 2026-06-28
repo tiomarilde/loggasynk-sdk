@@ -15,7 +15,11 @@ final readonly class SendImageMessageRequest implements RequestPayload
 
     public static function create(string $phone, string $image, ?string $caption = null): self
     {
-        return new self($phone, $image, $caption);
+        return new self(
+            PayloadValidator::phone($phone),
+            PayloadValidator::url($image, 'image'),
+            PayloadValidator::optionalString($caption, 'caption', 1024),
+        );
     }
 
     public function toArray(): array

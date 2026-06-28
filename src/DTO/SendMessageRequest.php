@@ -18,7 +18,15 @@ final readonly class SendMessageRequest implements RequestPayload
         ?string $text = null,
         ?string $imageUrl = null,
     ): self {
-        return new self($phone, $text, $imageUrl);
+        if ($text === null && $imageUrl === null) {
+            throw new \InvalidArgumentException('Informe text ou imageUrl.');
+        }
+
+        return new self(
+            PayloadValidator::phone($phone),
+            PayloadValidator::optionalString($text, 'text', 4096),
+            $imageUrl === null ? null : PayloadValidator::url($imageUrl, 'imageUrl'),
+        );
     }
 
     public function toArray(): array

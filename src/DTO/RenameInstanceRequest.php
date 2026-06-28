@@ -13,7 +13,7 @@ final readonly class RenameInstanceRequest implements RequestPayload
 
     public static function create(string $name): self
     {
-        return new self($name);
+        return new self(PayloadValidator::requiredString($name, 'name', 120));
     }
 
     public function toArray(): array

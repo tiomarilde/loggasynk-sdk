@@ -48,6 +48,12 @@ final readonly class CurlHttpClient implements HttpClient
             CURLOPT_CUSTOMREQUEST => $request->method->value,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => $this->timeoutInSeconds,
+            CURLOPT_CONNECTTIMEOUT => min(10, $this->timeoutInSeconds),
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_MAXREDIRS => 0,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_USERAGENT => 'loggasynk-connect-api-php/0.1',
             CURLOPT_HTTPHEADER => $headers,
         ];
 

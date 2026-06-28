@@ -11,6 +11,7 @@ use LoggaSynk\ConnectApi\DTO\SendMessageRequest;
 use LoggaSynk\ConnectApi\DTO\SendTextMessageRequest;
 use LoggaSynk\ConnectApi\DTO\UpdateProfileRequest;
 use LoggaSynk\ConnectApi\DTO\UpdateWebhookRequest;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 final class DtoTest extends TestCase
@@ -39,5 +40,26 @@ final class DtoTest extends TestCase
             ['phone' => '5511999999999', 'text' => 'Oi'],
             SendMessageRequest::create('5511999999999', text: 'Oi')->toArray(),
         );
+    }
+
+    public function testRejectsInvalidPhone(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        SendTextMessageRequest::create('abc', 'Ola!');
+    }
+
+    public function testRejectsInsecureWebhookUrl(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        UpdateWebhookRequest::create('http://app.test/webhook');
+    }
+
+    public function testRejectsEmptyFlexibleMessage(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        SendMessageRequest::create('5511999999999');
     }
 }
