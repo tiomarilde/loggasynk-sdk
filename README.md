@@ -14,6 +14,7 @@ composer install
 <?php
 
 use LoggaSynk\ConnectApi\Domain\ClientCredentials;
+use LoggaSynk\ConnectApi\DTO\SendTextMessageRequest;
 use LoggaSynk\ConnectApi\LoggaSynkClient;
 
 $client = LoggaSynkClient::create(
@@ -39,10 +40,7 @@ $status = $client->whatsapp()->status($instanceId, $token);
 
 $client->whatsapp()->sendText(
     $instanceId,
-    [
-        'phone' => '5511999999999',
-        'message' => 'Ola!'
-    ],
+    SendTextMessageRequest::create('5511999999999', 'Ola!'),
     $token,
 );
 ```
@@ -54,6 +52,7 @@ use LoggaSynk\ConnectApi\Domain\WebhookSignatureVerifier;
 
 $isValid = WebhookSignatureVerifier::create($secret)->isValid(
     $rawBody,
+    $_SERVER['HTTP_X_LOGGASYNK_TIMESTAMP'] ?? '',
     $_SERVER['HTTP_X_LOGGASYNK_SIGNATURE'] ?? '',
 );
 ```
@@ -70,4 +69,5 @@ $isValid = WebhookSignatureVerifier::create($secret)->isValid(
 
 ```bash
 composer test
+composer auth:test
 ```

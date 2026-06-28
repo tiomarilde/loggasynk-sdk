@@ -6,6 +6,7 @@ namespace LoggaSynk\ConnectApi\Resource;
 
 use LoggaSynk\ConnectApi\Domain\AccessToken;
 use LoggaSynk\ConnectApi\Domain\ApiConfig;
+use LoggaSynk\ConnectApi\DTO\RequestPayload;
 use LoggaSynk\ConnectApi\Exception\ApiHttpException;
 use LoggaSynk\ConnectApi\Exception\AuthenticationException;
 use LoggaSynk\ConnectApi\Exception\InvalidPayloadException;
@@ -34,9 +35,12 @@ final readonly class WhatsAppResource
      * @param array<string, mixed> $payload
      * @return array<string, mixed>|null
      */
-    public function createInstance(array $payload, AccessToken $token): ?array
+    public function createInstance(array|RequestPayload $payload, AccessToken $token): ?array
     {
-        return $this->execute(HttpRequest::post($this->config->url('/whatsapp/instances'), $payload), $token);
+        return $this->execute(
+            HttpRequest::post($this->config->url('/whatsapp/instances'), $this->payload($payload)),
+            $token,
+        );
     }
 
     /**
@@ -83,68 +87,98 @@ final readonly class WhatsAppResource
      * @param array<string, mixed> $payload
      * @return array<string, mixed>|null
      */
-    public function rename(string $instanceId, array $payload, AccessToken $token): ?array
+    public function rename(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
     {
-        return $this->execute(HttpRequest::patch($this->whatsappUrl($instanceId, 'name'), $payload), $token);
+        return $this->execute(
+            HttpRequest::patch($this->whatsappUrl($instanceId, 'name'), $this->payload($payload)),
+            $token,
+        );
     }
 
     /**
      * @param array<string, mixed> $payload
      * @return array<string, mixed>|null
      */
-    public function updateProfile(string $instanceId, array $payload, AccessToken $token): ?array
+    public function updateProfile(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
     {
-        return $this->execute(HttpRequest::post($this->whatsappUrl($instanceId, 'profile'), $payload), $token);
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'profile'), $this->payload($payload)),
+            $token,
+        );
     }
 
     /**
      * @param array<string, mixed> $payload
      * @return array<string, mixed>|null
      */
-    public function updateWebhook(string $instanceId, array $payload, AccessToken $token): ?array
+    public function updateWebhook(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
     {
-        return $this->execute(HttpRequest::post($this->config->url("/{$instanceId}/webhook"), $payload), $token);
+        return $this->execute(
+            HttpRequest::post($this->config->url("/{$instanceId}/webhook"), $this->payload($payload)),
+            $token,
+        );
     }
 
     /**
      * @param array<string, mixed> $payload
      * @return array<string, mixed>|null
      */
-    public function configureCallBlocking(string $instanceId, array $payload, AccessToken $token): ?array
+    public function configureCallBlocking(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
     {
-        return $this->execute(HttpRequest::post($this->whatsappUrl($instanceId, 'call-blocking'), $payload), $token);
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'call-blocking'), $this->payload($payload)),
+            $token,
+        );
     }
 
     /**
      * @param array<string, mixed> $payload
      * @return array<string, mixed>|null
      */
-    public function sendText(string $instanceId, array $payload, AccessToken $token): ?array
+    public function sendText(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
     {
-        return $this->execute(HttpRequest::post($this->whatsappUrl($instanceId, 'send-text'), $payload), $token);
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'send-text'), $this->payload($payload)),
+            $token,
+        );
     }
 
     /**
      * @param array<string, mixed> $payload
      * @return array<string, mixed>|null
      */
-    public function sendImage(string $instanceId, array $payload, AccessToken $token): ?array
+    public function sendImage(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
     {
-        return $this->execute(HttpRequest::post($this->whatsappUrl($instanceId, 'send-image'), $payload), $token);
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'send-image'), $this->payload($payload)),
+            $token,
+        );
     }
 
     /**
      * @param array<string, mixed> $payload
      * @return array<string, mixed>|null
      */
-    public function send(string $instanceId, array $payload, AccessToken $token): ?array
+    public function send(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
     {
-        return $this->execute(HttpRequest::post($this->whatsappUrl($instanceId, 'send'), $payload), $token);
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'send'), $this->payload($payload)),
+            $token,
+        );
     }
 
     private function whatsappUrl(string $instanceId, string $path): string
     {
         return $this->config->url("/whatsapp/{$instanceId}/{$path}");
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>
+     */
+    private function payload(array|RequestPayload $payload): array
+    {
+        return $payload instanceof RequestPayload ? $payload->toArray() : $payload;
     }
 
     /**

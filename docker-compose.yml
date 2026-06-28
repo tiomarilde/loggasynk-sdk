@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile
     container_name: connect-api
     working_dir: /app
+    env_file:
+      - .env
     volumes:
       - ./:/app
     tty: true

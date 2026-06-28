@@ -17,11 +17,14 @@ final readonly class WebhookSignatureVerifier
         return new self($secret, $algorithm);
     }
 
-    public function isValid(string $payload, string $signature): bool
+    public function isValid(string $rawBody, string $timestamp, string $signature): bool
     {
-        $expected = hash_hmac($this->algorithm, $payload, $this->secret);
-        $normalized = str_replace("{$this->algorithm}=", '', $signature);
+        $expected = "{$this->algorithm}=" . hash_hmac(
+            $this->algorithm,
+            "{$timestamp}.{$rawBody}",
+            $this->secret,
+        );
 
-        return hash_equals($expected, $normalized);
+        return hash_equals($expected, $signature);
     }
 }
