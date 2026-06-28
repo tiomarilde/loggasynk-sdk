@@ -8,17 +8,18 @@ use InvalidArgumentException;
 
 final readonly class ApiConfig
 {
-    private const DEFAULT_BASE_URL = 'https://api.loggasynk.com.br/api/v1';
+    private const string DEFAULT_BASE_URL = 'https://api.loggasynk.com.br/api/v1';
 
     private function __construct(
         public string $baseUrl,
-        public int $timeoutInSeconds,
-    ) {
+        public int    $timeoutInSeconds,
+    )
+    {
     }
 
     public static function create(
         string $baseUrl = self::DEFAULT_BASE_URL,
-        int $timeoutInSeconds = 15,
+        int    $timeoutInSeconds = 15,
     ): self {
         $normalizedBaseUrl = rtrim(trim($baseUrl), '/');
         $scheme = parse_url($normalizedBaseUrl, PHP_URL_SCHEME);

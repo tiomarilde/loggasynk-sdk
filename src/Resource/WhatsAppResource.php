@@ -14,14 +14,14 @@ use LoggaSynk\ConnectApi\Exception\InvalidPayloadException;
 use LoggaSynk\ConnectApi\Exception\RateLimitException;
 use LoggaSynk\ConnectApi\Http\HttpClient;
 use LoggaSynk\ConnectApi\Http\HttpRequest;
-use LoggaSynk\ConnectApi\Http\HttpResponse;
 
 final readonly class WhatsAppResource
 {
     public function __construct(
-        private ApiConfig $config,
+        private ApiConfig  $config,
         private HttpClient $httpClient,
-    ) {
+    )
+    {
     }
 
     /**

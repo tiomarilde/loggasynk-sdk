@@ -79,4 +79,5 @@ $isValid = WebhookSignatureVerifier::create($secret)->isValid(
 composer check
 composer test
 composer auth:test
+composer api:smoke
 ```
