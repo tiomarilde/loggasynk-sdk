@@ -10,8 +10,22 @@ https://api.loggasynk.com.br/api/v1
 
 ## Instalar
 
+Em desenvolvimento:
+
 ```bash
 composer install
+```
+
+Em producao, sem PHPUnit e dependencias de teste:
+
+```bash
+composer install --no-dev --optimize-autoloader
+```
+
+Se for usar como dependencia em outro projeto:
+
+```bash
+composer require loggasynk/connect-api
 ```
 
 ## Configurar
@@ -220,11 +234,20 @@ Observacoes:
 
 ## Testes
 
+Comandos de desenvolvimento do SDK:
+
 ```bash
+composer install
 composer check
 composer test
 composer auth:test
 composer api:smoke
+```
+
+Para publicar/usar em producao, prefira:
+
+```bash
+composer install --no-dev --optimize-autoloader
 ```
 
 ## Seguranca
