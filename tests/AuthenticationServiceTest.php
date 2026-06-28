@@ -19,24 +19,24 @@ final class AuthenticationServiceTest extends TestCase
     public function testAuthenticatesWithClientCredentials(): void
     {
         $httpClient = new FakeHttpClient(new HttpResponse(200, [
-            'access_token' => 'eyJ0eXAi',
+            'access_token' => 'fake_access_token',
             'token_type' => 'Bearer',
             'expires_in' => 3600,
         ]));
 
         $client = LoggaSynkClient::create(
-            ClientCredentials::create('lgs_1234567890', 'sk_live_1234567890'),
+            ClientCredentials::create('lgs_test_client_id', 'replace_with_client_secret'),
             httpClient: $httpClient,
         );
 
         $token = $client->authenticate();
 
-        self::assertSame('Bearer eyJ0eXAi', $token->authorizationHeader());
+        self::assertSame('Bearer fake_access_token', $token->authorizationHeader());
         self::assertSame('POST', $httpClient->lastRequest?->method->value);
         self::assertSame('https://api.loggasynk.com.br/api/v1/auth/token', $httpClient->lastRequest?->url);
         self::assertSame([
-            'client_id' => 'lgs_1234567890',
-            'client_secret' => 'sk_live_1234567890',
+            'client_id' => 'lgs_test_client_id',
+            'client_secret' => 'replace_with_client_secret',
         ], $httpClient->lastRequest?->body);
     }
 
@@ -64,7 +64,7 @@ final class AuthenticationServiceTest extends TestCase
     private function clientForStatus(int $statusCode): LoggaSynkClient
     {
         return LoggaSynkClient::create(
-            ClientCredentials::create('lgs_1234567890', 'sk_live_1234567890'),
+            ClientCredentials::create('lgs_test_client_id', 'replace_with_client_secret'),
             httpClient: new FakeHttpClient(new HttpResponse($statusCode, ['error' => 'erro'])),
         );
     }

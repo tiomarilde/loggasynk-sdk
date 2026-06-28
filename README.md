@@ -19,8 +19,8 @@ composer install
 Crie um `.env` no projeto ou injete as variaveis no ambiente da sua aplicacao:
 
 ```env
-LOGGASYNK_CLIENT_ID=lgs_1234567890
-LOGGASYNK_CLIENT_SECRET=sk_live_1234567890
+LOGGASYNK_CLIENT_ID=lgs_test_client_id
+LOGGASYNK_CLIENT_SECRET=replace_with_client_secret
 LOGGASYNK_INSTANCE_ID=inst_3f9a2c1b-7d4e-4a86-9b1f-2c5e8a0d6f12
 ```
 
