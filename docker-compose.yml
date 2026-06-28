@@ -1,0 +1,10 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: connect-api
+    working_dir: /app
+    volumes:
+      - ./:/app
+    tty: true

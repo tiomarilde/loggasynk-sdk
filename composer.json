@@ -1,0 +1,32 @@
+{
+  "name": "loggasynk/connect-api",
+  "description": "Conector PHP 8.4+ simples e reutilizavel para a API LoggaSynk.",
+  "version": "0.1.0",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "LoggaSynk\\ConnectApi\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "LoggaSynk\\ConnectApi\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=8.4",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.0"
+  },
+  "scripts": {
+    "test": "phpunit",
+    "analyse": "php -l src/LoggaSynkClient.php"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
