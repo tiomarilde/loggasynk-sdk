@@ -1,7 +1,7 @@
 {
   "name": "loggasynk/connect-api",
   "description": "Conector PHP 8.4+ simples e reutilizavel para a API LoggaSynk.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "library",
   "license": "MIT",
   "autoload": {

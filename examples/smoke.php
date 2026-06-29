@@ -35,9 +35,6 @@ if ($instanceId === '') {
 writeStep('whatsapp/status', $client->whatsapp()->status($instanceId, $token));
 writeStep('whatsapp/data', $client->whatsapp()->data($instanceId, $token));
 
-/**
- * @param array<string, mixed>|null $payload
- */
 function writeStep(string $name, ?array $payload): void
 {
     echo PHP_EOL . "== {$name} ==" . PHP_EOL;

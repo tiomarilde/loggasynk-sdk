@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace LoggaSynk\ConnectApi\Domain;
 
+use DateMalformedStringException;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
 final readonly class AccessToken
 {
     private function __construct(
-        public string $value,
-        public string $type,
-        public int $expiresIn,
+        public string            $value,
+        public string            $type,
+        public int               $expiresIn,
         public DateTimeImmutable $issuedAt,
-    ) {
+    )
+    {
     }
 
     /**
@@ -36,14 +38,20 @@ final readonly class AccessToken
 
     public function authorizationHeader(): string
     {
-        return "{$this->type} {$this->value}";
+        return "$this->type $this->value";
     }
 
+    /**
+     * @throws DateMalformedStringException
+     */
     public function expiresAt(): DateTimeImmutable
     {
-        return $this->issuedAt->modify("+{$this->expiresIn} seconds");
+        return $this->issuedAt->modify("+$this->expiresIn seconds");
     }
 
+    /**
+     * @throws DateMalformedStringException
+     */
     public function isExpired(?DateTimeImmutable $now = null): bool
     {
         return ($now ?? new DateTimeImmutable()) >= $this->expiresAt();
@@ -58,7 +66,7 @@ final readonly class AccessToken
             return;
         }
 
-        throw new InvalidArgumentException("Campo {$field} ausente ou invalido.");
+        throw new InvalidArgumentException("Campo $field ausente ou invalido.");
     }
 
     /**
@@ -70,6 +78,6 @@ final readonly class AccessToken
             return;
         }
 
-        throw new InvalidArgumentException("Campo {$field} ausente ou invalido.");
+        throw new InvalidArgumentException("Campo $field ausente ou invalido.");
     }
 }

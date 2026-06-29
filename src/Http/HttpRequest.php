@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LoggaSynk\ConnectApi\Http;
 
+use JsonException;
 use LoggaSynk\ConnectApi\Domain\AccessToken;
 
 final readonly class HttpRequest
@@ -14,10 +15,11 @@ final readonly class HttpRequest
      */
     private function __construct(
         public HttpMethod $method,
-        public string $url,
-        public ?array $body = null,
-        public array $headers = [],
-    ) {
+        public string     $url,
+        public ?array     $body = null,
+        public array      $headers = [],
+    )
+    {
     }
 
     /**
@@ -46,6 +48,15 @@ final readonly class HttpRequest
         return new self(HttpMethod::Patch, $url, $body, $headers);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     * @param list<string> $headers
+     */
+    public static function delete(string $url, array $body = [], array $headers = []): self
+    {
+        return new self(HttpMethod::Delete, $url, $body, $headers);
+    }
+
     public function withBearerToken(AccessToken $token): self
     {
         return new self(
@@ -56,6 +67,9 @@ final readonly class HttpRequest
         );
     }
 
+    /**
+     * @throws JsonException
+     */
     public function encodedBody(): ?string
     {
         if ($this->body === null) {

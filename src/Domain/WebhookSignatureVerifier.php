@@ -5,25 +5,26 @@ declare(strict_types=1);
 namespace LoggaSynk\ConnectApi\Domain;
 
 use DateTimeImmutable;
-use DateTimeZone;
 use InvalidArgumentException;
 
 final readonly class WebhookSignatureVerifier
 {
-    private const DEFAULT_TOLERANCE_IN_SECONDS = 300;
+    private const int DEFAULT_TOLERANCE_IN_SECONDS = 300;
 
     private function __construct(
         private string $secret,
         private string $algorithm,
-        private int $toleranceInSeconds,
-    ) {
+        private int    $toleranceInSeconds,
+    )
+    {
     }
 
     public static function create(
         string $secret,
         string $algorithm = 'sha256',
-        int $toleranceInSeconds = self::DEFAULT_TOLERANCE_IN_SECONDS,
-    ): self {
+        int    $toleranceInSeconds = self::DEFAULT_TOLERANCE_IN_SECONDS,
+    ): self
+    {
         $normalizedSecret = trim($secret);
 
         if ($normalizedSecret === '') {
@@ -42,11 +43,12 @@ final readonly class WebhookSignatureVerifier
     }
 
     public function isValid(
-        string $rawBody,
-        string $timestamp,
-        string $signature,
+        string             $rawBody,
+        string             $timestamp,
+        string             $signature,
         ?DateTimeImmutable $now = null,
-    ): bool {
+    ): bool
+    {
         if ($timestamp === '' || $signature === '') {
             return false;
         }
@@ -60,11 +62,11 @@ final readonly class WebhookSignatureVerifier
 
     private function expectedSignature(string $rawBody, string $timestamp): string
     {
-        return "{$this->algorithm}=" . hash_hmac(
-            $this->algorithm,
-            "{$timestamp}.{$rawBody}",
-            $this->secret,
-        );
+        return "$this->algorithm=" . hash_hmac(
+                $this->algorithm,
+                "$timestamp.$rawBody",
+                $this->secret,
+            );
     }
 
     private function isInsideTolerance(string $timestamp, DateTimeImmutable $now): bool
@@ -74,8 +76,8 @@ final readonly class WebhookSignatureVerifier
         }
 
         $eventTime = DateTimeImmutable::createFromFormat(DATE_ATOM, $timestamp)
-            ?: DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.v\Z', $timestamp, new DateTimeZone('UTC'))
-            ?: false;
+            ?: DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.v\Z', $timestamp)
+                ?: false;
 
         if (!$eventTime instanceof DateTimeImmutable) {
             return false;

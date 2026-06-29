@@ -11,7 +11,8 @@ final readonly class ClientCredentials
     private function __construct(
         public string $clientId,
         public string $clientSecret,
-    ) {
+    )
+    {
     }
 
     public static function create(string $clientId, string $clientSecret): self
@@ -41,6 +42,6 @@ final readonly class ClientCredentials
             return $normalized;
         }
 
-        throw new InvalidArgumentException("{$field} nao pode ser vazio.");
+        throw new InvalidArgumentException("$field nao pode ser vazio.");
     }
 }

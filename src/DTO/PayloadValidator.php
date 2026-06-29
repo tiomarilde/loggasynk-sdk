@@ -36,6 +36,49 @@ final class PayloadValidator
         return self::requiredString($value, $field, $maxLength);
     }
 
+    /**
+     * Texto opcional que aceita string vazia (ex.: limpar um campo), apenas
+     * limitando o tamanho. null mantém o campo inalterado.
+     */
+    public static function optionalText(?string $value, string $field, int $maxLength): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $normalized = trim($value);
+
+        if (strlen($normalized) > $maxLength) {
+            throw new InvalidArgumentException("{$field} excede {$maxLength} caracteres.");
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Mídia aceita como URL pública ou base64 (com ou sem data URI). Apenas
+     * exige conteúdo; o formato é tratado pela API/bridge.
+     */
+    public static function media(string $value, string $field): string
+    {
+        $normalized = trim($value);
+
+        if ($normalized === '') {
+            throw new InvalidArgumentException("{$field} nao pode ser vazio (envie uma URL publica ou base64).");
+        }
+
+        return $normalized;
+    }
+
+    public static function coordinate(float $value, string $field, float $min, float $max): float
+    {
+        if ($value < $min || $value > $max) {
+            throw new InvalidArgumentException("{$field} deve estar entre {$min} e {$max}.");
+        }
+
+        return $value;
+    }
+
     public static function phone(string $value): string
     {
         $normalized = preg_replace('/\D+/', '', $value) ?? '';

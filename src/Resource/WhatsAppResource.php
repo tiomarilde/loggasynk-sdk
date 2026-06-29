@@ -168,6 +168,162 @@ final readonly class WhatsAppResource
         );
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function device(string $instanceId, AccessToken $token): ?array
+    {
+        return $this->execute(HttpRequest::get($this->whatsappUrl($instanceId, 'device')), $token);
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function restart(string $instanceId, AccessToken $token): ?array
+    {
+        return $this->execute(HttpRequest::post($this->whatsappUrl($instanceId, 'restart')), $token);
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function disconnect(string $instanceId, AccessToken $token): ?array
+    {
+        return $this->execute(HttpRequest::post($this->whatsappUrl($instanceId, 'disconnect')), $token);
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function reply(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'reply'), $this->payload($payload)),
+            $token,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function forward(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'forward'), $this->payload($payload)),
+            $token,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function react(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'reaction'), $this->payload($payload)),
+            $token,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function markAsRead(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'read'), $this->payload($payload)),
+            $token,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function deleteMessage(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::delete($this->whatsappUrl($instanceId, 'message'), $this->payload($payload)),
+            $token,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function sendAudio(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'send-audio'), $this->payload($payload)),
+            $token,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function sendVideo(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'send-video'), $this->payload($payload)),
+            $token,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function sendDocument(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'send-document'), $this->payload($payload)),
+            $token,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function sendSticker(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'send-sticker'), $this->payload($payload)),
+            $token,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function sendLocation(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'send-location'), $this->payload($payload)),
+            $token,
+        );
+    }
+
+    /**
+     * @param array<string, mixed>|RequestPayload $payload
+     * @return array<string, mixed>|null
+     */
+    public function sendContact(string $instanceId, array|RequestPayload $payload, AccessToken $token): ?array
+    {
+        return $this->execute(
+            HttpRequest::post($this->whatsappUrl($instanceId, 'send-contact'), $this->payload($payload)),
+            $token,
+        );
+    }
+
     private function whatsappUrl(string $instanceId, string $path): string
     {
         return $this->config->url('/whatsapp/' . $this->instanceId($instanceId)->pathSegment() . "/{$path}");

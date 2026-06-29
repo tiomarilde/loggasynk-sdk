@@ -8,7 +8,8 @@ final readonly class RenameInstanceRequest implements RequestPayload
 {
     private function __construct(
         public string $name,
-    ) {
+    )
+    {
     }
 
     public static function create(string $name): self

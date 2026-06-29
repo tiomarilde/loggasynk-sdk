@@ -18,10 +18,11 @@ use LoggaSynk\ConnectApi\Http\HttpResponse;
 final readonly class AuthenticationService
 {
     public function __construct(
-        private ApiConfig $config,
+        private ApiConfig         $config,
         private ClientCredentials $credentials,
-        private HttpClient $httpClient,
-    ) {
+        private HttpClient        $httpClient,
+    )
+    {
     }
 
     public function authenticate(): AccessToken

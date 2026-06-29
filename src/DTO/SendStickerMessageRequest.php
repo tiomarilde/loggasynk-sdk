@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace LoggaSynk\ConnectApi\DTO;
 
-final readonly class SendTextMessageRequest implements RequestPayload
+final readonly class SendStickerMessageRequest implements RequestPayload
 {
     private function __construct(
         public string $phone,
-        public string $message,
+        public string $sticker,
     )
     {
     }
 
-    public static function create(string $phone, string $message): self
+    /**
+     * @param string $sticker URL pública ou base64 da figura (WebP).
+     */
+    public static function create(string $phone, string $sticker): self
     {
         return new self(
             PayloadValidator::phone($phone),
-            PayloadValidator::requiredString($message, 'message', 4096),
+            PayloadValidator::media($sticker, 'sticker'),
         );
     }
 
@@ -25,7 +28,7 @@ final readonly class SendTextMessageRequest implements RequestPayload
     {
         return [
             'phone' => $this->phone,
-            'message' => $this->message,
+            'sticker' => $this->sticker,
         ];
     }
 }

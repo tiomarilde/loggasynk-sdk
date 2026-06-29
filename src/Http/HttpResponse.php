@@ -10,8 +10,9 @@ final readonly class HttpResponse
      * @param array<string, mixed>|null $body
      */
     public function __construct(
-        public int $statusCode,
+        public int    $statusCode,
         public ?array $body,
-    ) {
+    )
+    {
     }
 }

@@ -11,34 +11,38 @@ final readonly class CurlHttpClient implements HttpClient
 {
     public function __construct(
         private int $timeoutInSeconds = 15,
-    ) {
+    )
+    {
     }
 
+    /**
+     * @throws JsonException
+     */
     public function request(HttpRequest $request): HttpResponse
     {
         $handle = curl_init($request->url);
 
         if ($handle === false) {
-            throw new ApiException('Nao foi possivel iniciar o cURL.');
+            throw new ApiException('Nao foi possível iniciar o cURL.');
         }
 
         curl_setopt_array($handle, $this->options($request));
 
         $rawBody = curl_exec($handle);
-        $statusCode = (int) curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
+        $statusCode = (int)curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
         $error = curl_error($handle);
 
         curl_close($handle);
 
         if ($rawBody === false) {
-            throw new ApiException("Falha de conexao com a API LoggaSynk: {$error}");
+            throw new ApiException("Falha de conexão com a API LoggaSynk: $error");
         }
 
-        return new HttpResponse($statusCode, $this->decode((string) $rawBody));
+        return new HttpResponse($statusCode, $this->decode((string)$rawBody));
     }
 
     /**
-     * @return array<int, mixed>
+     * @throws JsonException
      */
     private function options(HttpRequest $request): array
     {
@@ -48,12 +52,6 @@ final readonly class CurlHttpClient implements HttpClient
             CURLOPT_CUSTOMREQUEST => $request->method->value,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => $this->timeoutInSeconds,
-            CURLOPT_CONNECTTIMEOUT => min(10, $this->timeoutInSeconds),
-            CURLOPT_FOLLOWLOCATION => false,
-            CURLOPT_MAXREDIRS => 0,
-            CURLOPT_SSL_VERIFYHOST => 2,
-            CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_USERAGENT => 'loggasynk-connect-api-php/0.1',
             CURLOPT_HTTPHEADER => $headers,
         ];
 

@@ -17,7 +17,7 @@ $client = LoggaSynkClient::create(
 $token = $client->authenticate();
 
 echo json_encode([
-    'token_type' => $token->type,
-    'expires_at' => $token->expiresAt()->format(DATE_ATOM),
-    'authorization_header_preview' => substr($token->authorizationHeader(), 0, 24) . '...',
-], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) . PHP_EOL;
+        'token_type' => $token->type,
+        'expires_at' => $token->expiresAt()->format(DATE_ATOM),
+        'authorization_header_preview' => substr($token->authorizationHeader(), 0, 24) . '...',
+    ], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) . PHP_EOL;

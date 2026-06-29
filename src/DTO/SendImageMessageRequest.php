@@ -7,10 +7,11 @@ namespace LoggaSynk\ConnectApi\DTO;
 final readonly class SendImageMessageRequest implements RequestPayload
 {
     private function __construct(
-        public string $phone,
-        public string $image,
+        public string  $phone,
+        public string  $image,
         public ?string $caption,
-    ) {
+    )
+    {
     }
 
     public static function create(string $phone, string $image, ?string $caption = null): self
@@ -28,6 +29,6 @@ final readonly class SendImageMessageRequest implements RequestPayload
             'phone' => $this->phone,
             'image' => $this->image,
             'caption' => $this->caption,
-        ], static fn (?string $value): bool => $value !== null);
+        ], static fn(?string $value): bool => $value !== null);
     }
 }

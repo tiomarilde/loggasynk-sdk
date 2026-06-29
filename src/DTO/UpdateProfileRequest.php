@@ -10,14 +10,16 @@ final readonly class UpdateProfileRequest implements RequestPayload
         public ?string $photoUrl,
         public ?string $name,
         public ?string $description,
-    ) {
+    )
+    {
     }
 
     public static function create(
         ?string $photoUrl = null,
         ?string $name = null,
         ?string $description = null,
-    ): self {
+    ): self
+    {
         return new self(
             $photoUrl === null ? null : PayloadValidator::url($photoUrl, 'photoUrl'),
             PayloadValidator::optionalString($name, 'name', 120),
@@ -31,6 +33,6 @@ final readonly class UpdateProfileRequest implements RequestPayload
             'photo_url' => $this->photoUrl,
             'name' => $this->name,
             'description' => $this->description,
-        ], static fn (?string $value): bool => $value !== null);
+        ], static fn(?string $value): bool => $value !== null);
     }
 }

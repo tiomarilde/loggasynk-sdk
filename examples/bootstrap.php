@@ -46,9 +46,6 @@ function optionalEnv(string $name, ?string $default = null): ?string
     return $value;
 }
 
-/**
- * @param array<string, mixed>|null $payload
- */
 function printJson(string $title, ?array $payload): void
 {
     echo PHP_EOL . "== {$title} ==" . PHP_EOL;

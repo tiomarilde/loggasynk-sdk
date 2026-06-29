@@ -16,15 +16,17 @@ final readonly class LoggaSynkClient
 {
     private function __construct(
         private AuthenticationService $authentication,
-        private WhatsAppResource $whatsapp,
-    ) {
+        private WhatsAppResource      $whatsapp,
+    )
+    {
     }
 
     public static function create(
         ClientCredentials $credentials,
-        ?ApiConfig $config = null,
-        ?HttpClient $httpClient = null,
-    ): self {
+        ?ApiConfig        $config = null,
+        ?HttpClient       $httpClient = null,
+    ): self
+    {
         $resolvedConfig = $config ?? ApiConfig::create();
         $resolvedHttpClient = $httpClient ?? new CurlHttpClient($resolvedConfig->timeoutInSeconds);
 

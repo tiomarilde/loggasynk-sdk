@@ -66,7 +66,10 @@ $token = $client->authenticate();
 | `$client->whatsapp()->billing(...)` | `GET /whatsapp/{instanceId}/billing` |
 | `$client->whatsapp()->status(...)` | `GET /whatsapp/{instanceId}/status` |
 | `$client->whatsapp()->data(...)` | `GET /whatsapp/{instanceId}/data` |
+| `$client->whatsapp()->device(...)` | `GET /whatsapp/{instanceId}/device` |
 | `$client->whatsapp()->qrCode(...)` | `GET /whatsapp/{instanceId}/qr-code` |
+| `$client->whatsapp()->restart(...)` | `POST /whatsapp/{instanceId}/restart` |
+| `$client->whatsapp()->disconnect(...)` | `POST /whatsapp/{instanceId}/disconnect` |
 | `$client->whatsapp()->updateProfile(...)` | `POST /whatsapp/{instanceId}/profile` |
 | `$client->whatsapp()->configureCallBlocking(...)` | `POST /whatsapp/{instanceId}/call-blocking` |
 | `$client->whatsapp()->rename(...)` | `PATCH /whatsapp/{instanceId}/name` |
@@ -74,7 +77,18 @@ $token = $client->authenticate();
 | `$client->whatsapp()->updateWebhook(...)` | `POST /{instanceId}/webhook` |
 | `$client->whatsapp()->sendText(...)` | `POST /whatsapp/{instanceId}/send-text` |
 | `$client->whatsapp()->sendImage(...)` | `POST /whatsapp/{instanceId}/send-image` |
+| `$client->whatsapp()->sendAudio(...)` | `POST /whatsapp/{instanceId}/send-audio` |
+| `$client->whatsapp()->sendVideo(...)` | `POST /whatsapp/{instanceId}/send-video` |
+| `$client->whatsapp()->sendDocument(...)` | `POST /whatsapp/{instanceId}/send-document` |
+| `$client->whatsapp()->sendSticker(...)` | `POST /whatsapp/{instanceId}/send-sticker` |
+| `$client->whatsapp()->sendLocation(...)` | `POST /whatsapp/{instanceId}/send-location` |
+| `$client->whatsapp()->sendContact(...)` | `POST /whatsapp/{instanceId}/send-contact` |
 | `$client->whatsapp()->send(...)` | `POST /whatsapp/{instanceId}/send` |
+| `$client->whatsapp()->reply(...)` | `POST /whatsapp/{instanceId}/reply` |
+| `$client->whatsapp()->forward(...)` | `POST /whatsapp/{instanceId}/forward` |
+| `$client->whatsapp()->react(...)` | `POST /whatsapp/{instanceId}/reaction` |
+| `$client->whatsapp()->markAsRead(...)` | `POST /whatsapp/{instanceId}/read` |
+| `$client->whatsapp()->deleteMessage(...)` | `DELETE /whatsapp/{instanceId}/message` |
 
 ## Autenticacao
 
@@ -162,6 +176,95 @@ $client->whatsapp()->send(
         phone: '5511999999999',
         text: 'Mensagem com imagem opcional',
         imageUrl: 'https://cdn.seusite.com/imagem.png',
+    ),
+    $token,
+);
+```
+
+## Midia (audio, video, documento, sticker, localizacao, contato)
+
+Toda midia aceita **URL publica** ou **base64**.
+
+```php
+use LoggaSynk\ConnectApi\DTO\ContactCard;
+use LoggaSynk\ConnectApi\DTO\SendAudioMessageRequest;
+use LoggaSynk\ConnectApi\DTO\SendContactMessageRequest;
+use LoggaSynk\ConnectApi\DTO\SendDocumentMessageRequest;
+use LoggaSynk\ConnectApi\DTO\SendLocationMessageRequest;
+use LoggaSynk\ConnectApi\DTO\SendStickerMessageRequest;
+use LoggaSynk\ConnectApi\DTO\SendVideoMessageRequest;
+
+$client->whatsapp()->sendAudio(
+    $instanceId,
+    SendAudioMessageRequest::create('5511999999999', 'https://cdn.seusite.com/audio.ogg', ptt: true),
+    $token,
+);
+
+$client->whatsapp()->sendDocument(
+    $instanceId,
+    SendDocumentMessageRequest::create('5511999999999', 'https://cdn.seusite.com/contrato.pdf', fileName: 'Contrato.pdf'),
+    $token,
+);
+
+$client->whatsapp()->sendLocation(
+    $instanceId,
+    SendLocationMessageRequest::create('5511999999999', -23.55052, -46.633308, name: 'Praca da Se'),
+    $token,
+);
+
+$client->whatsapp()->sendContact(
+    $instanceId,
+    SendContactMessageRequest::create(
+        '5511999999999',
+        ContactCard::create('Maria Souza', '5511988887777', organization: 'Suporte'),
+    ),
+    $token,
+);
+```
+
+## Interagir Com Mensagens (responder, reencaminhar, reagir, ler, apagar)
+
+```php
+use LoggaSynk\ConnectApi\DTO\DeleteMessageRequest;
+use LoggaSynk\ConnectApi\DTO\ForwardMessageRequest;
+use LoggaSynk\ConnectApi\DTO\ReactionRequest;
+use LoggaSynk\ConnectApi\DTO\ReadMessageRequest;
+use LoggaSynk\ConnectApi\DTO\ReplyMessageRequest;
+
+// messageId vem do campo message_id do webhook de mensagem recebida.
+$client->whatsapp()->reply(
+    $instanceId,
+    ReplyMessageRequest::create('5511999999999', 'Claro, posso ajudar!', $messageId, quotedText: 'Voces tem isso?'),
+    $token,
+);
+
+$client->whatsapp()->react($instanceId, ReactionRequest::create('5511999999999', $messageId, '👍'), $token);
+$client->whatsapp()->markAsRead($instanceId, ReadMessageRequest::create('5511999999999', $messageId), $token);
+$client->whatsapp()->forward($instanceId, ForwardMessageRequest::create('5511888887777', $messageId), $token);
+$client->whatsapp()->deleteMessage($instanceId, DeleteMessageRequest::forEveryone('5511999999999', $messageId), $token);
+```
+
+## Ciclo De Vida Da Instancia (reiniciar, desconectar, dispositivo)
+
+```php
+$device = $client->whatsapp()->device($instanceId, $token);      // dados do celular conectado
+$client->whatsapp()->restart($instanceId, $token);               // reconecta sem novo QR
+$client->whatsapp()->disconnect($instanceId, $token);            // logout; reconecta lendo novo QR
+```
+
+## Automacoes Da Instancia
+
+```php
+use LoggaSynk\ConnectApi\DTO\CallBlockingRequest;
+
+// Recusar ligacoes + mensagem automatica + leitura automatica + visualizar status.
+$client->whatsapp()->configureCallBlocking(
+    $instanceId,
+    CallBlockingRequest::create(
+        rejectCalls: true,
+        rejectMessage: 'Ola! Nao atendemos por ligacao. Mande sua mensagem aqui.',
+        autoRead: true,
+        autoReadStatus: true,
     ),
     $token,
 );
