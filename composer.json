@@ -31,6 +31,10 @@
     "example:profile": "php examples/profile-settings.php",
     "example:webhook": "php examples/webhook.php",
     "example:messages": "php examples/send-messages.php",
+    "example:media": "php examples/send-media.php",
+    "example:interactions": "php examples/message-interactions.php",
+    "example:lifecycle": "php examples/instance-lifecycle.php",
+    "example:automations": "php examples/automations.php",
     "lint": "find src tests examples -name '*.php' -print0 | xargs -0 -n1 php -l",
     "check": [
       "@lint",

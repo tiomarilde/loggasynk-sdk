@@ -314,6 +314,10 @@ docker compose exec app composer example:create-instance
 docker compose exec app composer example:profile
 docker compose exec app composer example:webhook
 docker compose exec app composer example:messages
+docker compose exec app composer example:media
+docker compose exec app composer example:interactions
+docker compose exec app composer example:lifecycle
+docker compose exec app composer example:automations
 ```
 
 Observacoes:
@@ -323,6 +327,10 @@ Observacoes:
 - `example:profile` altera perfil, bloqueio de ligacoes e nome da instancia.
 - `example:webhook` consulta e atualiza a URL do webhook, alem de validar assinatura localmente.
 - `example:messages` envia mensagens reais para `LOGGASYNK_MESSAGE_PHONE`.
+- `example:media` envia localizacao e contato; audio/video/documento/sticker rodam se as URLs (`LOGGASYNK_AUDIO_URL`, `LOGGASYNK_VIDEO_URL`, `LOGGASYNK_DOCUMENT_URL`, `LOGGASYNK_STICKER_URL`) estiverem definidas.
+- `example:interactions` exige `LOGGASYNK_MESSAGE_ID` (id de uma mensagem recebida): marca como lida, reage, responde, reencaminha e apaga.
+- `example:lifecycle` consulta `data`/`status`/`device` e reinicia a instancia (`disconnect` fica comentado por ser destrutivo).
+- `example:automations` liga recusa de ligacao + mensagem automatica, leitura automatica e visualizacao automatica de status.
 
 ## Design
 
